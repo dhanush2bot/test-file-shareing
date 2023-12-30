@@ -1,15 +1,12 @@
-#(©)Codexbotz
-
+import sys
+from datetime import datetime, timedelta
 from aiohttp import web
 from plugins import web_server
-
-import pyromod.listen
 from pyrogram import Client
 from pyrogram.enums import ParseMode
-import sys
-from datetime import datetime
-
-from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT
+from config import API_HASH, APP_ID, LOGGER, TG_BOT_TOKEN, TG_BOT_WORKERS, FORCE_SUB_CHANNEL, CHANNEL_ID, PORT, OWNER_ID
+from plugins import task_feature, complete_task, verify_user_token
+from plugins import premium_user, add_premium_user, is_premium_user
 
 class Bot(Client):
     def __init__(self):
@@ -74,3 +71,29 @@ class Bot(Client):
     async def stop(self, *args):
         await super().stop()
         self.LOGGER(__name__).info("Bot stopped.")
+
+    async def add_premium(self, user_id, days):
+        if user_id == OWNER_ID:  # Only allow the owner to add premium users
+            add_premium_user(user_id, days)
+            await self.send_message(chat_id=user_id, text=f"Your premium plan has been added for {days} days.")
+        else:
+            await self.send_message(chat_id=user_id, text="You are not authorized to use this command.")
+
+    async def check_premium_expiry(self, user_id):
+        if is_premium_user(user_id):
+            expiry_time = None  # Get the expiry time for the user from the premium user data
+            if expiry_time and datetime.now() > expiry_time:
+                await self.send_message(chat_id=user_id, text="Your premium plan has expired.")
+                # Handle user's premium plan expiration logic here
+
+    async def handle_message(self, message):
+        # Add your message handling logic here
+        pass
+
+    async def handle_callback_query(self, callback_query):
+        # Add your callback query handling logic here
+        pass
+
+if __name__ == "__main__":
+    bot = Bot()
+    bot.run()
