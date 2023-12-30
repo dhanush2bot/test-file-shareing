@@ -4,14 +4,14 @@ FROM python:3.8
 # Set the working directory in the container
 WORKDIR /app
 
+# Upgrade pip to the latest version
+RUN pip install --upgrade pip
+
 # Copy the requirements.txt file into the container at /app
 COPY requirements.txt .
 
-# Upgrade setuptools and wheel
-RUN pip3 install --no-cache-dir --upgrade setuptools wheel
-
 # Install any needed packages specified in requirements.txt
-RUN pip3 install --no-cache-dir --use-pep517 -r requirements.txt
+RUN pip install --no-cache-dir --use-pep517 -r requirements.txt
 
 # Copy the rest of the application's files into the container at /app
 COPY . .
