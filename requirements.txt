@@ -12,4 +12,4 @@ aiohttp
 async-timeout
 aiogram
 asyncpg
-dotenv
+dotenv==0.19.1
