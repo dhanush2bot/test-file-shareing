@@ -1,17 +1,17 @@
-# Use the official Python 3.8 image as the base image
+# Use the official Python image as the base image
 FROM python:3.8-slim-buster
 
-# Set the working directory inside the container to /app
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements.txt file from your local machine into the container's /app directory
-COPY requirements.txt requirements.txt
+# Copy the requirements.txt file into the container at /app
+COPY requirements.txt .
 
-# Install the Python dependencies listed in requirements.txt using pip
-RUN pip3 install -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy all files from your local machine into the container's /app directory
+# Copy the rest of the application's files into the container at /app
 COPY . .
 
-# Set the default command to run when the container starts
-CMD python3 main.py
+# Run the bot when the container launches
+CMD ["python3", "main.py"]
