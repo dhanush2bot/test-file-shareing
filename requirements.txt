@@ -13,4 +13,5 @@ async-timeout
 aiogram
 asyncpg
 python-dotenv>=0.19.1
+requests==2.26.0
 
