@@ -7,14 +7,11 @@ WORKDIR /app
 # Copy the requirements.txt file into the container at /app
 COPY requirements.txt .
 
-# Upgrade pip and setuptools
-RUN pip3 install --no-cache-dir --upgrade pip setuptools
-
-# Install any system updates
-RUN apt-get update && apt-get upgrade -y
+# Upgrade setuptools and wheel
+RUN pip3 install --no-cache-dir --upgrade setuptools wheel
 
 # Install any needed packages specified in requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir --use-pep517 -r requirements.txt
 
 # Copy the rest of the application's files into the container at /app
 COPY . .
